@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { Html, Head, Body, Container, Heading, Text, Button } from "@react-email/components";
+import { Html, Head, Body, Container, Heading, Text } from "@react-email/components";
 
 interface VerificationEmailProps {
   username: string;
   otp: string;
 }
 
-export default function VerificationEmail({ username, otp } : VerificationEmailProps) {
+const VerificationEmail = ({ username, otp }: VerificationEmailProps) => {
   const main = {
     backgroundColor: '#f6f9fc',
     padding: '20px',
@@ -34,26 +34,18 @@ export default function VerificationEmail({ username, otp } : VerificationEmailP
     color: '#666666'
   };
   
-  const button = {
-    backgroundColor: '#007bff',
-    color: '#ffffff',
-    padding: '10px 20px',
-    textDecoration: 'none',
-    borderRadius: '5px',
-    display: 'inline-block'
-  };
-
   return (
     <Html>
-    <Head />
-    <Body style={main}>
-      <Container style={container}>
-        <Heading style={heading}>Welcome, {username}!</Heading>
-        <Text style={paragraph}>Your OTP code is: <strong>{otp}</strong></Text>
-        <Text style={paragraph}>Please enter this code in the application to verify your email address.</Text>
-        {/* <Button style={button} href="https://your-app.com/resend-otp">Verify</Button> */}
-      </Container>
-    </Body>
-  </Html>
+      <Head />
+      <Body style={main}>
+        <Container style={container}>
+          <Heading style={heading}>Welcome, {username}!</Heading>
+          <Text style={paragraph}>Your OTP code is: <strong>{otp}</strong></Text>
+          <Text style={paragraph}>Please enter this code in the application to verify your email address.</Text>
+        </Container>
+      </Body>
+    </Html>
   );
-}
+};
+
+export default VerificationEmail;
