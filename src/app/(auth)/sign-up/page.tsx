@@ -10,7 +10,7 @@ import { useToast } from "@/components/ui/use-toast"
 import { useRouter } from 'next/navigation';
 import { signUpSchema } from '@/schema/signUpSchema';
 import { ApiResponse } from '@/types/ApiResponse';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
@@ -81,8 +81,8 @@ export default function page() {
   }
 
   return (
-    <div className='flex justify-center items-center min-h-screen bg-grey-100'>
-      <div className='w-full max-w-lg p-8 space-y-8 bg-white rounded-lg shadow-md mx-2'>
+    <div className='flex justify-center items-center min-h-screen'>
+      <div className='w-full max-w-lg p-8 space-y-8 bg-gray-900 rounded-lg shadow-md mx-2'>
         <div className="text-center">
           <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-6">Join Anonymous Message</h1>
           <p className="mb-4">Sign up to start your anonymous adventure</p>
@@ -135,13 +135,15 @@ export default function page() {
                 </FormItem>
               )}
             />
-            <Button type='submit' disabled={isSubmitting} >
+            <div className="flex justify-center">
+            <Button type='submit' disabled={isSubmitting} className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-lg transition duration-200 ease-in-out transform hover:scale-105' >
               {isSubmitting ? (
                 <>
                 <Loader2 className='mr-2 h-4 w-4 animate-spin' /> Please wait
                 </>
               ) : ("Sign Up")}
             </Button>
+            </div>
           </form>
         </Form>
         <div className="text-center mt-4">

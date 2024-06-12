@@ -23,7 +23,7 @@ export const AuthOptions: NextAuthOptions = {
                         ]
                     })
                     if (!user) {
-                        throw new Error("No User Found with this username/email");
+                        throw new Error("Incorrect email/username or password");
                     }
                     if (!user.isVerified) {
                         throw new Error("Please verify your account before login");
