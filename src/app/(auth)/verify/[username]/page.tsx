@@ -21,10 +21,14 @@ export default function VerifyAccount() {
     //zod implementation
     const form = useForm<z.infer<typeof verifySchema>>({
         resolver: zodResolver(verifySchema),
+        defaultValues: {
+            code: '',
+        }
     });
 
     const onSubmit = async (data: z.infer<typeof verifySchema>) => {
         try {
+            // console.log(data)
             const response = await axios.post('/api/verify-code', {
                 username: param.username,
                 code: data.code
@@ -35,7 +39,7 @@ export default function VerifyAccount() {
                 description: response.data.message,
             })
 
-            router.replace('sign-in')
+            router.replace('/sign-in')
         } catch (error) {
             console.log("Error in sign-up", error);
             const axiosError = error as AxiosError<ApiResponse>;

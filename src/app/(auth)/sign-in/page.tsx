@@ -34,7 +34,6 @@ export default function page() {
       identifier: data.identifier,
       password: data.password
     })
-    console.log(result)
     setIsSubmitting(false);
     if (result?.error) {
       console.log(result.error.substring(7))
