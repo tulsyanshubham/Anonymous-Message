@@ -43,7 +43,6 @@ export async function POST(req: Request) {
 
 export async function GET(req: Request) {
     await dbConnect();
-
     const session = await getServerSession(AuthOptions)
     if (!session || !session.user) {
         return Response.json({

@@ -9,7 +9,7 @@ import { acceptMessageSchema } from '@/schema/acceptMessageSchema';
 import { ApiResponse } from '@/types/ApiResponse';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios, { AxiosError } from 'axios';
-import { Loader2, RefreshCcw } from 'lucide-react';
+import { Loader, Loader2, RefreshCcw } from 'lucide-react';
 import { User } from 'next-auth';
 import { useSession } from 'next-auth/react';
 import React, { useCallback, useEffect, useState } from 'react'
@@ -63,7 +63,7 @@ export default function page() {
     setIsSwitchLoading(false);
     try {
 
-      const response = await axios.get<ApiResponse>('/api/get-messages');
+      const response = await axios.get<ApiResponse>('/api/accept-message');
       setMessages(response.data.messages || []);
       if (refresh) {
         toast({
@@ -115,9 +115,12 @@ export default function page() {
     }
   }
 
-  // const {username} = session?.user as User;
-  const { username } = session?.user;
-  const baseUrl = `${window.location.protocol}//${window.location.host}`;
+  const username = session?.user.username;
+
+
+  // const { username } = session?.user;
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || (typeof window !== 'undefined' ? `${window.location.protocol}//${window.location.host}` : 'http://localhost:3000');
+
   const profileURL = `${baseUrl}/u/${username}`;
 
   const copyToClipboard = () => {
@@ -129,18 +132,18 @@ export default function page() {
 
 
   if (!session || !session.user) return (
-    <div>
-      <h1>Please login</h1>
+    <div className=' w-full h-full pt-32 flex justify-center items-center'>
+      <Loader2 className='h-14 w-14 animate-spin' />
     </div>
   )
   else
     return (
-      <div className='my-8 mx-4 md:mx-8 lg:mx-auto p-6 bg-white rounded w-full max-w-6xl'>
-        <h1 className="text-4xl font-bold mb-4">User Dashboard</h1>
+      <div className='my-8 mx-4 md:mx-8 lg:mx-auto p-6 rounded w-full max-w-6xl'>
+        <h1 className="text-4xl font-bold mb-4">Your Dashboard</h1>
         <div className="mb-4">
-          <h2 className="text-lg font-semibold mb--2">Copy Your Unique Link</h2>{' '}
-          <div className="flex items center">
-            <input type="text" value={profileURL} disabled className="w-full p-2 mr-2 inpt-bordered input" />
+          <h2 className="text-lg font-semibold mb-2">Copy Your Unique Link</h2>{' '}
+          <div className="flex items center mb-3">
+            <input type="text" value={profileURL} disabled className="w-full p-2 mr-2 inpt-bordered input rounded-xl" />
             <Button onClick={copyToClipboard}>Copy</Button>
           </div>
           <div className="mb-4">
@@ -172,10 +175,10 @@ export default function page() {
             )}
           </Button>
           <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
-            {messages.length > 0 ? (messages.map((message,index) => (
+            {messages.length > 0 ? (messages.map((message, index) => (
               <MessageCard key={index} message={message} onMessageDelete={handleDeleteMessage} />
-            ))):(
-              <p className="text-center">No messages</p>
+            ))) : (
+              <p className="">No messages found</p>
             )}
           </div>
         </div>

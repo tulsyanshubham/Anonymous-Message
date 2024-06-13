@@ -65,7 +65,7 @@ export default function page() {
       router.replace(`/verify/${username}`);
 
     } catch (error) {
-      console.log("Error in sign-up", error);
+      // console.log("Error in sign-up", error);
       const axiosError = error as AxiosError<ApiResponse>;
       const errorMessage = axiosError.response?.data.message;
       setUsernameMessage(errorMessage ?? 'Something went wrong');

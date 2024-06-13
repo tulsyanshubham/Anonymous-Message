@@ -9,8 +9,8 @@ export async function POST(req: Request) {
         const decodedUsername = decodeURIComponent(username);
         //validate with zod
         const result = verifySchema.safeParse({code});
-        console.log(username, result)
-        console.log(typeof(result))
+        // console.log(username, result)
+        // console.log(typeof(result))
         // console.log(result.success) //TODO remove
         if (!result.success) {
             const codeError = result.error.format().code?._errors || [];

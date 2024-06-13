@@ -36,7 +36,7 @@ export default function page() {
     })
     setIsSubmitting(false);
     if (result?.error) {
-      console.log(result.error.substring(7))
+      // console.log(result.error.substring(7))
       toast({
         title: "Login Failed",
         description: result.error.substring(7),

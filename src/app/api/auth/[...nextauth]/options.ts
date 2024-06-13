@@ -21,18 +21,18 @@ export const AuthOptions: NextAuthOptions = {
                             { email: credentials.identifier },
                             { username: credentials.identifier }
                         ]
-                    })
+                    });
                     if (!user) {
                         throw new Error("Incorrect email/username or password");
                     }
                     if (!user.isVerified) {
                         throw new Error("Please verify your account before login");
                     }
-                    const isPasswordCorect = await bcrypt.compare(credentials.password, user.password);
-                    if (isPasswordCorect) {
+                    const isPasswordCorrect = await bcrypt.compare(credentials.password, user.password);
+                    if (isPasswordCorrect) {
                         return user;
                     } else {
-                        throw new Error("Incorrect Password")
+                        throw new Error("Incorrect Password");
                     }
                 } catch (err: any) {
                     throw new Error(err);
@@ -46,25 +46,27 @@ export const AuthOptions: NextAuthOptions = {
     session: {
         strategy: "jwt"
     },
-    secret: process.env.AUTH_SECTET_KEY,
+    secret: process.env.AUTH_SECRET_KEY,
     callbacks: {
         async jwt({ token, user }) {
-            if(user){
+            if (user) {
                 token._id = user._id?.toString();
-                token.usernamme = user.usernamme
-                token.isVerified = user.isVerified
-                token.isAcceptingMessages = user.isAcceptingMessages
+                token.username = user.username;
+                token.isVerified = user.isVerified;
+                token.isAcceptingMessages = user.isAcceptingMessages;
             }
-            return token
+            return token;
         },
         async session({ session, token }) {
-            if(token){
-                session.user._id = token._id
-                session.user.usernamme = token.usernamme
-                session.user.isVerified = token.isVerified
-                session.user.isAcceptingMessages = token.isAcceptingMessages
+            if (token) {
+                session.user = {
+                    _id: token._id,
+                    username: token.username,
+                    isVerified: token.isVerified,
+                    isAcceptingMessages: token.isAcceptingMessages,
+                };
             }
-            return session
+            return session;
         },
     }
-}
+};
