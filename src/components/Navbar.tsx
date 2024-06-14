@@ -12,7 +12,7 @@ export default function Navbar() {
     // const user: User = session?.user as User;
 
     return (
-        <nav className='p-4 md:p-6 shadow-md bg-gray-900'>
+        <nav className='p-4 md:p-6 shadow-md bg-gray-900 fixed w-full'>
             <div className='container mx-auto flex flex-col md:flex-row justify-between items-center'>
                 <a className='text-xl lg:text-3xl md:text-2xl font-bold mb-4 md:mb-0' href="/">
                     Anonymous Messages {session ? (`(${user.username || user.email})`) : ""}
