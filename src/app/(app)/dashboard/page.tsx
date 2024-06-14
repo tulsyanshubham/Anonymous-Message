@@ -23,6 +23,7 @@ export default function page() {
 
   const handleDeleteMessage = async (messageId: string) => {
     setMessages(messages.filter((message) => message.id !== messageId));
+    fetchMessages(false);
   }
 
   const { data: session } = useSession();
@@ -38,12 +39,10 @@ export default function page() {
     setIsSwitchLoading(true);
 
     try {
-
       const response = await axios.get<ApiResponse>('/api/accept-message');
       setValue('acceptMessages', response.data.isAcceptingMessages);
 
     } catch (error) {
-
       const axiosError = error as AxiosError<ApiResponse>;
       const errorMessage = axiosError.response?.data.message || "Failed to fetch message settings";
       toast({
@@ -61,18 +60,19 @@ export default function page() {
   const fetchMessages = useCallback(async (refresh: boolean) => {
     setIsLoading(true);
     setIsSwitchLoading(false);
-    try {
 
-      const response = await axios.get<ApiResponse>('/api/accept-message');
-      setMessages(response.data.messages || []);
+    try {
+      const response = await axios.post<ApiResponse>('/api/get-messages');
+      // console.log(response.data.messages)
+      setMessages(response.data?.messages || []);
       if (refresh) {
         toast({
-          title: 'Success',
-          description: 'Messages refreshed',
+          title: 'Refreshed',
+          description: 'Showing latest messages',
         });
       }
     } catch (error) {
-
+      
       const axiosError = error as AxiosError<ApiResponse>;
       const errorMessage = axiosError.response?.data.message || "Failed to fetch message settings";
       toast({
@@ -97,7 +97,7 @@ export default function page() {
   //handle switch change
   const handleSwitchChange = async () => {
     try {
-      const response = await axios.post('/api/accept-message', {
+      const response = await axios.post<ApiResponse>('/api/accept-message', {
         acceptMessages: !acceptMessages,
       });
       setValue('acceptMessages', !acceptMessages);
@@ -150,7 +150,7 @@ export default function page() {
             <Switch
               {...register('acceptMessages')}
               checked={acceptMessages}
-              onChange={handleSwitchChange}
+              onCheckedChange={handleSwitchChange}
               disabled={isSwitchLoading}
             />
             <span className="ml-2">
@@ -176,7 +176,7 @@ export default function page() {
           </Button>
           <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
             {messages.length > 0 ? (messages.map((message, index) => (
-              <MessageCard key={index} message={message} onMessageDelete={handleDeleteMessage} />
+              <MessageCard key={message._id} message={message} onMessageDelete={handleDeleteMessage} />
             ))) : (
               <p className="">No messages found</p>
             )}

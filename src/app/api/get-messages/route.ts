@@ -25,11 +25,17 @@ export async function POST(req: Request) {
             { $sort: { "messages.createdAt": -1 } }, //sort messages by createdAt in descending order
             { $group: { _id: "$_id", messages: { $push: "$messages" } } } //group messages back into an array having same id
         ]);
-        if(!user || user.length === 0) {
+        if(!user) {
             return Response.json({
                 success: false,
                 message: "user not found"
             }, { status: 404 })
+        }
+        if(user.length === 0) {
+            return Response.json({
+                success: false,
+                message: "No messages found"
+            }, { status: 200 })
         }
         return Response.json({
             success: true,
