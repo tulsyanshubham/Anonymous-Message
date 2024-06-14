@@ -11,7 +11,7 @@ import Autoplay from "embla-carousel-autoplay"
 import messages from "@/data/messages.json"
 import { Mail } from "lucide-react";
 
-export default function page() {
+export default function Home() {
   return (
     <>
       <main className="flex-grow flex flex-col items-center justify-center bg-gray-800 text-white h-[90vh]">

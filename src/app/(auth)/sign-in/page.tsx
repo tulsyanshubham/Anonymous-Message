@@ -13,7 +13,7 @@ import { Loader2 } from 'lucide-react';
 import { signInSchema } from '@/schema/signInSchema';
 import { signIn } from 'next-auth/react';
 
-export default function page() {
+export default function Sign_in() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
   const router = useRouter();

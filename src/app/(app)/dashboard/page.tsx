@@ -15,7 +15,7 @@ import { useSession } from 'next-auth/react';
 import React, { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
 
-export default function page() {
+export default function Dasboard() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSwitchLoading, setIsSwitchLoading] = useState<boolean>(false);
@@ -55,7 +55,7 @@ export default function page() {
       setIsSwitchLoading(false);
     }
 
-  }, [setValue]);
+  }, [setValue,toast]);
 
   const fetchMessages = useCallback(async (refresh: boolean) => {
     setIsLoading(true);
@@ -85,14 +85,14 @@ export default function page() {
       setIsLoading(false);
       setIsSwitchLoading(false);
     }
-  }, [setIsLoading, setMessages])
+  }, [setIsLoading, setMessages,toast])
 
   useEffect(() => {
     if (!session || !session.user) return;
 
     fetchMessages(false);
     fetchAcceptMessages();
-  }, [session, setValue, fetchAcceptMessages, fetchMessages])
+  }, [session, setValue, fetchAcceptMessages, fetchMessages,toast])
 
   //handle switch change
   const handleSwitchChange = async () => {
