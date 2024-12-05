@@ -16,7 +16,6 @@ const transporter = nodemailer.createTransport({
 });
 
 export async function sendVerificationEmail(email: string, username: string, vrificationCode: string): Promise<ApiResponse> {
-    console.log(email, username, vrificationCode);
     const mailOptions = {
         from: mailid,
         to: email,
@@ -34,6 +33,7 @@ export async function sendVerificationEmail(email: string, username: string, vri
         transporter.sendMail(mailOptions, function (error: any, info: any) {
                 console.log('Email sent: ' + info.response);
         });
+        console.log("object")
         return {
             success: true,
             message: "Verification email sent successfully",
