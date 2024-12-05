@@ -16,6 +16,7 @@ const transporter = nodemailer.createTransport({
 });
 
 export async function sendVerificationEmail(email: string, username: string, vrificationCode: string): Promise<ApiResponse> {
+    console.log(email, username, vrificationCode);
     const mailOptions = {
         from: mailid,
         to: email,
