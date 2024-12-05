@@ -8,7 +8,7 @@ const transporter = nodemailer.createTransport({
     service: 'gmail',
     host: 'smtp.gmail.com',
     port: 587,
-    secure: false,
+    secure: true,
     auth: {
         user: mailid,
         pass: mailpsw
@@ -30,10 +30,21 @@ export async function sendVerificationEmail(email: string, username: string, vri
     </div>`
     };
     try {
+        await new Promise((resolve, reject) => {
+            // verify connection configuration
+            transporter.verify(function (error: Error | null, success: any) {
+                if (error) {
+                    console.log(error);
+                    reject(error);
+                } else {
+                    console.log("Server is ready to take our messages");
+                    resolve(success);
+                }
+            });
+        });
         transporter.sendMail(mailOptions, function (error: any, info: any) {
                 console.log('Email sent: ' + info.response);
         });
-        console.log("object")
         return {
             success: true,
             message: "Verification email sent successfully",
