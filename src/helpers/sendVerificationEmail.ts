@@ -5,7 +5,6 @@ const mailpsw = process.env.MAILPSW;
 const mailid = process.env.MAILID;
 
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
     host: 'smtp.gmail.com',
     port: 587,
     secure: true,
@@ -17,10 +16,13 @@ const transporter = nodemailer.createTransport({
 
 export async function sendVerificationEmail(email: string, username: string, vrificationCode: string): Promise<ApiResponse> {
     const mailOptions = {
-        from: mailid,
+        from: {
+            name: `Anonymous Message`,
+            address: mailid,
+        },
         to: email,
         subject: 'Sending Password for TipyDo',
-        html : `<div style="position: inherit; padding: 20px; margin: 20px auto; width: 80%; max-width: 600px; border-radius: 10px; box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1); border: 1px solid #fbfbfb;">
+        html: `<div style="position: inherit; padding: 20px; margin: 20px auto; width: 80%; max-width: 600px; border-radius: 10px; box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1); border: 1px solid #fbfbfb;">
         <div style="text-align: center; padding-bottom: 0px;">
             <h2>Hello <div style="color: green">${username}!</div></h2>
           	<h3>Your Verification code is:</h3>
@@ -30,20 +32,11 @@ export async function sendVerificationEmail(email: string, username: string, vri
     </div>`
     };
     try {
-        await new Promise((resolve, reject) => {
-            // verify connection configuration
-            transporter.verify(function (error: Error | null, success: any) {
-                if (error) {
-                    console.log(error);
-                    reject(error);
-                } else {
-                    console.log("Server is ready to take our messages");
-                    resolve(success);
-                }
-            });
+        transporter.verify(function (error: Error | null, success: any) {
+            console.log("Server is ready to take our messages");
         });
         transporter.sendMail(mailOptions, function (error: any, info: any) {
-                console.log('Email sent: ' + info.response);
+            console.log('Email sent: ' + info.response);
         });
         return {
             success: true,

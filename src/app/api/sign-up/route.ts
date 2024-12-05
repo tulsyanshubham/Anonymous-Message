@@ -38,8 +38,10 @@ export async function POST(req: Request) {
             else {
                 const hashedPassword = await bcrypt.hash(password, 10);
                 existingUserVerifiedByEmail.password = hashedPassword;
-                existingUserVerifiedByEmail.verifycode = verifycode;
+                existingUserVerifiedByEmail.verifycode = `${verifycode}`;
+                console.log(verifycode);
                 existingUserVerifiedByEmail.verifyCodeExpiry = new Date(Date.now() + 3600000);
+                await existingUserVerifiedByEmail.save();
             }
         }
         // If the email does not exist, create a new user
