@@ -78,7 +78,6 @@ export default function SendMessage() {
     setSuggestLoading(true);
     try {
       const response = await axios.post<ApiResponse>('/api/suggest-messages');
-      // console.log(response.data.message)
       setMessages(response.data.message);
       setError('');
     } catch (error) {
