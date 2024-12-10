@@ -55,7 +55,7 @@ export default function Dasboard() {
       setIsSwitchLoading(false);
     }
 
-  }, [setValue,toast]);
+  }, [setValue, toast]);
 
   const fetchMessages = useCallback(async (refresh: boolean) => {
     setIsLoading(true);
@@ -72,7 +72,7 @@ export default function Dasboard() {
         });
       }
     } catch (error) {
-      
+
       const axiosError = error as AxiosError<ApiResponse>;
       const errorMessage = axiosError.response?.data.message || "Failed to fetch message settings";
       toast({
@@ -85,14 +85,14 @@ export default function Dasboard() {
       setIsLoading(false);
       setIsSwitchLoading(false);
     }
-  }, [setIsLoading, setMessages,toast])
+  }, [setIsLoading, setMessages, toast])
 
   useEffect(() => {
     if (!session || !session.user) return;
 
     fetchMessages(false);
     fetchAcceptMessages();
-  }, [session, setValue, fetchAcceptMessages, fetchMessages,toast])
+  }, [session, setValue, fetchAcceptMessages, fetchMessages, toast])
 
   //handle switch change
   const handleSwitchChange = async () => {
@@ -130,58 +130,59 @@ export default function Dasboard() {
     });
   }
 
-
-  if (!session || !session.user) return (
-    <div className=' w-full h-full pt-32 flex justify-center items-center'>
-      <Loader2 className='h-14 w-14 animate-spin' />
-    </div>
-  )
-  else
-    return (
-      <div className='py-8 pt-28 mx-4 md:mx-8 lg:mx-auto p-6 rounded w-full max-w-6xl'>
-        <h1 className="text-4xl font-bold mb-4">Your Dashboard</h1>
-        <div className="mb-4">
-          <h2 className="text-lg font-semibold mb-2">Copy Your Unique Link</h2>{' '}
-          <div className="flex items center mb-3">
-            <input type="text" value={profileURL} disabled className="w-full p-2 mr-2 inpt-bordered input rounded-xl" />
-            <Button onClick={copyToClipboard}>Copy</Button>
-          </div>
+  return (
+    <>
+      {!session || !session.user ? (
+        <div className=' w-full h-full pt-32 flex justify-center items-center'>
+          <Loader2 className='h-14 w-14 animate-spin' />
+        </div>
+      ) : (
+        <div className='py-8 pt-28 mx-4 md:mx-8 lg:mx-auto p-6 rounded w-full max-w-6xl'>
+          <h1 className="text-4xl font-bold mb-4">Your Dashboard</h1>
           <div className="mb-4">
-            <Switch
-              {...register('acceptMessages')}
-              checked={acceptMessages}
-              onCheckedChange={handleSwitchChange}
-              disabled={isSwitchLoading}
-            />
-            <span className="ml-2">
-              Accept Messages: {acceptMessages ? 'On' : 'Off'}
-            </span>
-          </div>
-          <Separator />
-          <Button className='mt-4' variant='outline'
-            onClick={(e) => {
-              e.preventDefault();
-              fetchMessages(true);
-            }}
-            disabled={isLoading}>
-            {isLoading ? (
-              <>
-                <Loader2 className='h-4 w-4 animate-spin' />
-              </>
-            ) : (
-              <>
-                <RefreshCcw className='h-4 w-4' />
-              </>
-            )}
-          </Button>
-          <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
-            {messages.length > 0 ? (messages.map((message, index) => (
-              <MessageCard key={message._id} message={message} onMessageDelete={handleDeleteMessage} />
-            ))) : (
-              <p className="">No messages found</p>
-            )}
+            <h2 className="text-lg font-semibold mb-2">Copy Your Unique Link</h2>{' '}
+            <div className="flex items center mb-3">
+              <input type="text" value={profileURL} disabled className="w-full p-2 mr-2 inpt-bordered input rounded-xl" />
+              <Button onClick={copyToClipboard}>Copy</Button>
+            </div>
+            <div className="mb-4">
+              <Switch
+                {...register('acceptMessages')}
+                checked={acceptMessages}
+                onCheckedChange={handleSwitchChange}
+                disabled={isSwitchLoading}
+              />
+              <span className="ml-2">
+                Accept Messages: {acceptMessages ? 'On' : 'Off'}
+              </span>
+            </div>
+            <Separator />
+            <Button className='mt-4' variant='outline'
+              onClick={(e) => {
+                e.preventDefault();
+                fetchMessages(true);
+              }}
+              disabled={isLoading}>
+              {isLoading ? (
+                <>
+                  <Loader2 className='h-4 w-4 animate-spin' />
+                </>
+              ) : (
+                <>
+                  <RefreshCcw className='h-4 w-4' />
+                </>
+              )}
+            </Button>
+            <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
+              {messages.length > 0 ? (messages.map((message, index) => (
+                <MessageCard key={message._id} message={message} onMessageDelete={handleDeleteMessage} />
+              ))) : (
+                <p className="">No messages found</p>
+              )}
+            </div>
           </div>
         </div>
-      </div>
-    )
+      )}
+    </>
+  )
 }
