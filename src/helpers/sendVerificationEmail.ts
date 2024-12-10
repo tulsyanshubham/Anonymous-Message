@@ -11,6 +11,13 @@ export async function sendVerificationEmail(email: string, username: string, vri
             react: VerificationEmail({username, otp : vrificationCode}),
         });
         console.log("Email response:", emailResponse);
+        if(emailResponse?.error) {
+            // console.error("Error sending verification email: ", emailResponse.error);
+            return {
+                success: false,
+                message: "Error sending verification email",
+            };
+        }
         return {
             success: true,
             message: "Verification email sent successfully",

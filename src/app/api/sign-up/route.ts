@@ -3,6 +3,7 @@ import UserModel from "@/model/user";
 import bcrypt from "bcryptjs";
 
 import { sendVerificationEmail } from "@/helpers/sendVerificationEmail";
+import axios from "axios";
 
 export async function POST(req: Request) {
     await dbConnect();
@@ -40,6 +41,7 @@ export async function POST(req: Request) {
                 existingUserVerifiedByEmail.password = hashedPassword;
                 existingUserVerifiedByEmail.verifycode = verifycode;
                 existingUserVerifiedByEmail.verifyCodeExpiry = new Date(Date.now() + 3600000);
+                existingUserVerifiedByEmail.save();
             }
         }
         // If the email does not exist, create a new user
@@ -62,13 +64,25 @@ export async function POST(req: Request) {
 
         //Send verification email
         const emailResponse = await sendVerificationEmail(email, username, verifycode);
+        console.log(verifycode);
+        const mail_service_url = process.env.MAIL_SERVICE_URL || "";
+        const mail_service_psw = process.env.MAIL_SERVICE_PSW || "";
         if (!emailResponse.success) {
-            return Response.json(
-                {
-                    success: false,
-                    message: emailResponse.message,
-                }, { status: 500 }
-            );
+            const mail_service_response = await axios.post(mail_service_url, {
+                psw: mail_service_psw,
+                mail: email,
+                service_name: "Anonymous-Message",
+                otp: verifycode,
+            });
+            console.log(mail_service_response.data);
+            if (!mail_service_response.data.success) {
+                return Response.json(
+                    {
+                        success: false,
+                        message: emailResponse.message,
+                    }, { status: 500 }
+                );
+            }
         }
         // If the email is sent successfully, return a success message
         return Response.json(
