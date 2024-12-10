@@ -87,7 +87,7 @@ export default function MessageCard({ message, onMessageDelete }: MessageCardPro
                         <AlertDialogTrigger asChild>
                             <Button variant="destructive"> <X className='w-5 h-5' /> </Button>
                         </AlertDialogTrigger>
-                        <AlertDialogContent>
+                        <AlertDialogContent className='w-full'>
                             <AlertDialogHeader>
                                 <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                                 <AlertDialogDescription>
