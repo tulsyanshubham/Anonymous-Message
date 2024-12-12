@@ -63,11 +63,11 @@ export async function POST(req: Request) {
         }
 
         //Send verification email
-        const emailResponse = await sendVerificationEmail(email, username, verifycode);
+        // const emailResponse = await sendVerificationEmail(email, username, verifycode);
         console.log(verifycode);
         const mail_service_url = process.env.MAIL_SERVICE_URL || "";
         const mail_service_psw = process.env.MAIL_SERVICE_PSW || "";
-        if (!emailResponse.success) {
+        // if (!emailResponse.success) {
             const mail_service_response = await axios.post(mail_service_url, {
                 psw: mail_service_psw,
                 mail: email,
@@ -79,11 +79,12 @@ export async function POST(req: Request) {
                 return Response.json(
                     {
                         success: false,
-                        message: emailResponse.message,
+                        // message: emailResponse.message,
+                        message: mail_service_response.data.message,
                     }, { status: 500 }
                 );
             }
-        }
+        // }
         // If the email is sent successfully, return a success message
         return Response.json(
             {
